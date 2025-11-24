@@ -1,0 +1,43 @@
+# .github/workflows/ci.yml
+
+name: CI - Executar Testes Pytest
+
+# 1. Gatilho: Define o que inicia o workflow
+on:
+  push:
+    # O workflow será acionado SOMENTE quando houver um push para a branch 'main'
+    branches: [ main ]
+  # Permite que o workflow seja disparado manualmente (opcional, mas útil)
+  workflow_dispatch:
+
+# Define a tarefa principal
+jobs:
+  build:
+    # 2. Ambiente: Escolhe o sistema operacional para rodar a tarefa
+    runs-on: ubuntu-latest
+    
+    # Passos a serem executados
+    steps:
+    
+    # 3. Checkout: Baixa o seu código do repositório para a máquina virtual
+    - name: 📥 Checkout do Código
+      uses: actions/checkout@v4
+      
+    # 4. Configuração do Python: Define a versão exata do Python
+    - name: 🐍 Configurar Python 3.10
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+        
+    # 5. Instalação de Dependências: Prepara o ambiente
+    - name: 🛠️ Instalar Dependências
+      run: |
+        # Instala o Pytest
+        pip install pytest
+        # Instala as dependências listadas no requirements.txt (se existir)
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        
+    # 6. Execução dos Testes: Roda o Pytest
+    - name: ✅ Executar Pytest
+      run: |
+        pytest
