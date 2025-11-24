@@ -1,0 +1,31 @@
+# .github/workflows/ci.yml
+
+name: CI - Executar Testes Pytest
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: 📥 Checkout do Código
+      uses: actions/checkout@v4
+
+    - name: 🐍 Configurar Python 3.10
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: 🛠️ Instalar Dependências
+      run: |
+        pip install pytest
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+    - name: ✅ Executar Pytest
+      run: |
+        pytest
